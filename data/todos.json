@@ -1,0 +1,26 @@
+{
+    "todos":[
+        {
+        
+        "id": "1",
+        "task": "mern stack",
+        "description":"complete the mern stack course",
+        "date" : "5/16/2026",
+        "completed" : false
+    },
+    {
+        "id": "2",
+        "task": "react native",
+        "description":"complete the react native course",
+        "date" : "5/16/2026",
+        "completed" : false
+    },
+    {
+        "id": "3",
+        "task": "node js",
+        "description":"complete the node js course",
+        "date" : "5/16/2026",
+        "completed" : true
+    }
+]
+}
