@@ -27,4 +27,14 @@ npm i nodemon --save-dev
 
 npm run dev --> To start the application
 
-To restore node module and package-lock.json --> npm i/npm install
+o restore node module and package-lock.json --> npm i/npm install
+
+npm i mongoose
+
+npm i dotenv
+
+## MVC Architecture
+    >> M : Model (Structure of the mongodb)
+    >> V : View (Fronted)
+    >> C : Controllers (Brain / Logic of a route) 
+    
