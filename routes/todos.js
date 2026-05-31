@@ -1,6 +1,7 @@
 const express = require('express');
 const {todos} =require('../data/todos.json');
-
+const {TodoModel} = require('../models');
+const { getAllTodos, getCompletedTodos,getTodoById ,createTodo,updateTodoById,deleteTodoById} = require('../controller/todo-controller');
 const router =express.Router();
 /**
  * Route : /todos
@@ -9,12 +10,13 @@ const router =express.Router();
  * Access : public
  * Parameter : None
  */
-router.get('/',(req,res)=>{
-    res.status(200).json({
-        success:true,
-        data:todos
-    })
-})
+// router.get('/',(req,res)=>{
+//     res.status(200).json({
+//         success:true,
+//         data:todos
+//     })
+// })
+router.get('/',getAllTodos)
 /**
  * Route : /todos/complete
  * Method : GET
@@ -22,19 +24,20 @@ router.get('/',(req,res)=>{
  * Access : public
  * Parameter : none
  */
-router.get('/complete',(req,res)=>{
-    const complete = todos.filter((each)=> each.completed === true);
-    if(complete.length === 0){
-        return res.status(404).json({
-            success:false,
-            message:"No completed todos found"
-        })
-    }
-    res.status(200).json({
-        success:true,
-        data:complete
-    })
-})
+// router.get('/complete',(req,res)=>{
+//     const complete = todos.filter((each)=> each.completed === true);
+//     if(complete.length === 0){
+//         return res.status(404).json({
+//             success:false,
+//             message:"No completed todos found"
+//         })
+//     }
+//     res.status(200).json({
+//         success:true,
+//         data:complete
+//     })
+// })
+router.get('/complete',getCompletedTodos)
 /**
  * Route : /todos/:id
  * Method : GET
@@ -42,20 +45,21 @@ router.get('/complete',(req,res)=>{
  * Access : public
  * Parameter : id
  */
-router.get('/:id',(req,res)=>{
-    const {id} = req.params;
-    const todo = todos.find((each)=> each.id === id);
-    if(!todo){
-        return res.status(404).json({
-            success:false,
-            message:`Todo not found ${id}`
-        })
-    }
-    res.status(200).json({
-        success:true,
-        data: todo
-    })
-})
+// router.get('/:id',(req,res)=>{
+//     const {id} = req.params;
+//     const todo = todos.find((each)=> each.id === id);
+//     if(!todo){
+//         return res.status(404).json({
+//             success:false,
+//             message:`Todo not found ${id}`
+//         })
+//     }
+//     res.status(200).json({
+//         success:true,
+//         data: todo
+//     })
+// })
+router.get('/:id',getTodoById)
 /**
  * Route : /todos/
  * Method : POST
@@ -63,33 +67,34 @@ router.get('/:id',(req,res)=>{
  * Access : public
  * Parameter : None
  */
-router.post('/',(req,res)=>{
-    const {id,task,description,date,completed} = req.body;
-    if(!id || !task || !description || !date || completed){
-        return  res.status(400).json({
-            success:false,
-            message:`Please provide all the required fields`
-        })
-    }
-    const todo= todos.find((each) => each.id === id);
-     if(todo){
-        return res.status(409).json({
-            success:false,
-            message: `Todo already Exists with id :${id}`
-        })
-    }
-    todos.push({
-        id,
-        task,
-        description,
-        date,
-        completed
-    })
-    res.status(200).json({
-        success:true,
-        message:"Todo created successfully"
-    })
-})
+// router.post('/',(req,res)=>{
+//     const {id,task,description,date,completed} = req.body;
+//     if(!id || !task || !description || !date || completed){
+//         return  res.status(400).json({
+//             success:false,
+//             message:`Please provide all the required fields`
+//         })
+//     }
+//     const todo= todos.find((each) => each.id === id);
+//      if(todo){
+//         return res.status(409).json({
+//             success:false,
+//             message: `Todo already Exists with id :${id}`
+//         })
+//     }
+//     todos.push({
+//         id,
+//         task,
+//         description,
+//         date,
+//         completed
+//     })
+//     res.status(200).json({
+//         success:true,
+//         message:"Todo created successfully"
+//     })
+// })
+router.post('/',createTodo);
 /**
  * Route : /todos/
  * Method : PUT
@@ -97,30 +102,31 @@ router.post('/',(req,res)=>{
  * Access : public
  * Parameter : id
  */
-router.put('/:id',(req,res)=>{
-    const {id} = req.params;
-    const {data} = req.body;
-    const todo = todos.find((each)=> each.id === id);
-    if(!todo){
-          return res.status(404).json({
-            success:false,
-            message:`Todo not found ${id}`
-        })
-    }
-    const updatedTodo = todos.map((each)=>{
-        if(each.id === id){
-           return { ...each,
-            ...data
-           }
-        }
-        return each
-    })
-      res.status(200).json({
-            success:true,
-            data: updatedTodo,
-            message: `Todo Updated successfully`
-        })
-})
+// router.put('/:id',(req,res)=>{
+//     const {id} = req.params;
+//     const {data} = req.body;
+//     const todo = todos.find((each)=> each.id === id);
+//     if(!todo){
+//           return res.status(404).json({
+//             success:false,
+//             message:`Todo not found ${id}`
+//         })
+//     }
+//     const updatedTodo = todos.map((each)=>{
+//         if(each.id === id){
+//            return { ...each,
+//             ...data
+//            }
+//         }
+//         return each
+//     })
+//       res.status(200).json({
+//             success:true,
+//             data: updatedTodo,
+//             message: `Todo Updated successfully`
+//         })
+// })
+router.put('/:id',updateTodoById);
 /**
  * Route : /todos/:id
  * Method : DELETE
@@ -128,21 +134,22 @@ router.put('/:id',(req,res)=>{
  * Access : public
  * Parameter : id
  */
-router.delete('/:id',(req,res)=>{
-    const {id} = req.params;
-    const todo = todos.find((each)=> each.id === id);
-    if(!todo){
-        return res.status(404).json({
-            success:false,
-            message:`Todo not found for id : ${id}`
-        })
-    }
-    const deletedTodo = todos.filter((each) => each.id !== id);
-    res.status(200).json({
-        success:true,
-        data:deletedTodo,
-        message:"Todo deleted successfully"
-    })
-})
+// router.delete('/:id',(req,res)=>{
+//     const {id} = req.params;
+//     const todo = todos.find((each)=> each.id === id);
+//     if(!todo){
+//         return res.status(404).json({
+//             success:false,
+//             message:`Todo not found for id : ${id}`
+//         })
+//     }
+//     const deletedTodo = todos.filter((each) => each.id !== id);
+//     res.status(200).json({
+//         success:true,
+//         data:deletedTodo,
+//         message:"Todo deleted successfully"
+//     })
+// })
+router.delete('/:id',deleteTodoById);
 
 module.exports = router;
